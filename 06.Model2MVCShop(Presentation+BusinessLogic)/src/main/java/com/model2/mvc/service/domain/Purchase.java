@@ -39,7 +39,7 @@ public class Purchase {
 	}
 	public void setDlvyDate(String dlvyDate) {
 		System.out.println("setDlvyDate : " + dlvyDate);
-		this.dlvyDate = (dlvyDate!=null?dlvyDate.substring(0, 11):dlvyDate);
+		this.dlvyDate = (dlvyDate!=null && dlvyDate.length()>10?dlvyDate.substring(0, 11):dlvyDate);
 	}
 	public String getDlvyRequest() {
 		return dlvyRequest;

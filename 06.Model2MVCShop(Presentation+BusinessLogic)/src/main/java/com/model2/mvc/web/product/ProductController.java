@@ -98,7 +98,8 @@ public class ProductController {
 
 	@RequestMapping(value="/listProduct.do",method=RequestMethod.GET)
 	public String getProductList(@RequestParam(value = "page", defaultValue = "1") int currentPage,	Search search,
-									@RequestParam("menu") String menu, Map<String, Object> resultMap) throws Exception {
+									@RequestParam("menu") String menu, Map<String, Object> resultMap,
+									@RequestParam(value="pageSize", defaultValue="0") int pageSize) throws Exception {
 		
 		System.out.println("\n==>listProudct-GET Start.........");
 		if(!(CommonUtil.null2str(search.getSearchKeyword()).equals(""))){
@@ -108,7 +109,13 @@ public class ProductController {
 		// currentPage
 		search.setCurrentPage(currentPage);
 		// pageSize
-		search.setPageSize(pageSize);
+		if(pageSize == 0) {
+			System.out.println("pageSize : 0");
+			search.setPageSize(this.pageSize);
+		}else {
+			search.setPageSize(pageSize);
+		}
+		
 
 		
 		System.out.println("getProductList - search : " + search);
@@ -163,13 +170,19 @@ public class ProductController {
 	
 	@RequestMapping(value="/listProduct.do",method=RequestMethod.POST)
 	public String getProductList(@RequestParam(value = "currentPage", defaultValue = "1") int currentPage,	Search search,
-								Map<String, Object> resultMap,	@RequestParam("menu") String menu) throws Exception {
+								Map<String, Object> resultMap,	@RequestParam("menu") String menu,
+								@RequestParam(value="pageSize", defaultValue="0") int pageSize) throws Exception {
 		
 		System.out.println("\n==>listProudct-POST Start.........");
 		// currentPage
 		search.setCurrentPage(currentPage);
 		// pageSize
-		search.setPageSize(pageSize);
+		if(pageSize == 0) {
+			System.out.println("pageSize : 0");
+			search.setPageSize(this.pageSize);
+		}else {
+			search.setPageSize(pageSize);
+		}
 		
 
 		/// 4.DB에 접속하여 결과값을 Map으로 가져옴

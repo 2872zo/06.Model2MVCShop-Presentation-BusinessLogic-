@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -178,6 +179,53 @@ public class PurchaseController {
 		map.put("purchase", purchase);
 
 		return "forward:/purchase/updatePurchaseView.jsp";
+	}
+	
+	@RequestMapping("/updateTranCode.do")
+	public String updateTranCode(@RequestParam("tranCode") String tranCode, @RequestParam("tranNo") int tranNo) throws Exception{
+		Purchase purchase = new Purchase();
+		purchase.setTranNo(tranNo);
+		purchase.setTranCode(tranCode);
+
+		System.out.println(purchase);
+		
+		purchaseService.updateTranCode(purchase);
+
+		return "forward:/listPurchase.do?";
+	}
+	
+	@RequestMapping("/updateTranCodeByProd.do")
+	public String updateTranCodeByProd(Map<String,Object> resultMap,@RequestParam("prodNo") int prodNo, 
+			@RequestParam("tranCode") String tranCode, @RequestParam("page") String page,
+			@RequestParam("menu") String menu, Search search) throws Exception{		
+		Product product = new Product();
+		Purchase purchase = new Purchase();
+		product.setProdNo(prodNo);
+		purchase.setPurchaseProd(product);
+		purchase.setTranCode(tranCode);
+
+		purchaseService.updateTranCode(purchase);
+
+		resultMap.put("page", page);
+		resultMap.put("tranCode", tranCode);
+		resultMap.put("menu", menu);
+		if(search.getSearchCondition() != null) {
+			resultMap.put("searchCondition", search.getSearchCondition());
+			resultMap.put("searchKeyword", search.getSearchKeyword());
+		}
+		
+		return "forward:/listProduct.do?";
+	}
+	
+	@RequestMapping("/cancelPurchase.do")
+	public String cancelPurchase(@RequestParam("tranNo") int tranNo) {
+		Purchase purchase = new Purchase();
+		purchase.setTranNo(tranNo);
+		purchase.setTranCode("0");
+
+		purchaseService.updateTranCode(purchase);
+
+		return "forward:/listPurchase.do";
 	}
 	
 	private List makePurchaseList(int currentPage, List<Purchase> purchaseList, User user) {

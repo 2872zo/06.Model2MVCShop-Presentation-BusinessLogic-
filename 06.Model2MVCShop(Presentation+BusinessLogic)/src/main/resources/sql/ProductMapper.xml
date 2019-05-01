@@ -51,7 +51,7 @@
 					</if>
 				</when>
 				<when test="searchCondition == 1">
-					AND p.prod_name like #{searchKeyword}
+					AND p.prod_name like '%${searchKeyword}%'
 				</when>
 				<when test="searchCondition  == 2">
 					<if test="splitKeyword == null">
